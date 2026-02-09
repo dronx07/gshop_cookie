@@ -1,0 +1,48 @@
+name: Generate Google Shopping Sessions
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install seleniumbase
+
+      - name: Run cookie grabber
+        run: |
+          python cookie_grabber.py
+
+      - name: Show output
+        run: cat session_pool.json
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Pull remote changes
+        run: git pull --rebase origin main || echo "No remote changes"
+
+      - name: Commit updated session_pool.json
+        run: |
+          git add session_pool.json
+          git commit -m "Update session pool" || echo "No changes to commit"
+          git push origin main
