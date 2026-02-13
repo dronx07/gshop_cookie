@@ -2,8 +2,12 @@ name: Generate Google Shopping Sessions
 
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "0,30 * * * *"
   workflow_dispatch:
+
+concurrency:
+  group: session-pool
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -15,6 +19,9 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+
+      - name: Print current UTC time
+        run: date -u
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -38,11 +45,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Pull remote changes
-        run: git pull --rebase origin main || echo "No remote changes"
+      - name: Pull latest changes
+        run: |
+          git pull --rebase origin main || true
 
-      - name: Commit updated session_pool.json
+      - name: Commit and push if changed
         run: |
           git add session_pool.json
-          git commit -m "Update session pool" || echo "No changes to commit"
+          git diff --cached --quiet || git commit -m "Update session pool"
           git push origin main
