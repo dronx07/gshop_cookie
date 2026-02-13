@@ -10,7 +10,7 @@ KEYWORD = ["car", "cars", "auto", "vehicle", "bus"]
 TARGET_URL = "https://www.google.com/search?q={}"
 POOL_SIZE = 4
 SLEEP = 3
-
+MAX_SESSIONS = 100
 
 
 def grab_session(session_id: str, keyword: str):
@@ -61,10 +61,12 @@ def main():
     for _ in range(POOL_SIZE):
         keyword = random.choice(KEYWORD)
         session_id = f"s{len(sessions) + 1}"
-
         print(f"[INFO] Generating session {session_id} using keyword {keyword}")
         session = grab_session(session_id, keyword)
         sessions.append(session)
+
+    if len(sessions) > MAX_SESSIONS:
+        sessions = sessions[-MAX_SESSIONS:]
 
     payload = {
         "updated_at": int(time.time()),
