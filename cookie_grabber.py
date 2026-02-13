@@ -1,5 +1,4 @@
 import json
-import os
 import random
 import time
 from pathlib import Path
@@ -13,13 +12,16 @@ POOL_SIZE = 4
 SLEEP = 3
 
 
+
 def grab_session(session_id: str, keyword: str):
     try:
-        with SB(
-            headless=True,
-            uc=True,
-            chromium_arg="--no-sandbox",
-        ) as sb:
+        sb_kwargs = {
+            "headless": True,
+            "uc": True,
+            "chromium_arg": "--no-sandbox",
+        }
+
+        with SB(**sb_kwargs) as sb:
             sb.open(TARGET_URL.format(keyword))
             sb.sleep(SLEEP)
             sb.driver.refresh()
@@ -47,11 +49,18 @@ def grab_session(session_id: str, keyword: str):
 
 
 def main():
-    sessions = []
+    if OUTPUT_FILE.exists():
+        try:
+            existing_data = json.loads(OUTPUT_FILE.read_text(encoding="utf-8"))
+            sessions = existing_data.get("sessions", [])
+        except Exception:
+            sessions = []
+    else:
+        sessions = []
 
-    for i in range(POOL_SIZE):
+    for _ in range(POOL_SIZE):
         keyword = random.choice(KEYWORD)
-        session_id = f"s{i+1}"
+        session_id = f"s{len(sessions) + 1}"
 
         print(f"[INFO] Generating session {session_id} using keyword {keyword}")
         session = grab_session(session_id, keyword)
