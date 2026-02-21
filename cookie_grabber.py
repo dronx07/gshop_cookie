@@ -8,7 +8,7 @@ from seleniumbase import SB
 OUTPUT_FILE = Path("session_pool.json")
 KEYWORD = ["car", "cars", "auto", "vehicle", "bus"]
 TARGET_URL = "https://www.google.com/search?q={}"
-POOL_SIZE = 4
+POOL_SIZE = 5
 SLEEP = 3
 MAX_SESSIONS = 100
 
@@ -18,7 +18,6 @@ def grab_session(session_id: str, keyword: str):
         sb_kwargs = {
             "headless": True,
             "uc": True,
-            "chromium_arg": "--no-sandbox",
         }
 
         with SB(**sb_kwargs) as sb:
@@ -40,10 +39,12 @@ def grab_session(session_id: str, keyword: str):
     return {
         "id": session_id,
         "headers": {
-            "User-Agent": ua,
-            "Cookie": cookie_str,
             "Accept": "*/*",
-            "Connection": "keep-alive",
+            "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8",
+            "Accept-Encoding": "gzip, deflate, br, zstd",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+            "Cookie": cookie_str,
+            "X-Browser-Year": "2026"    
         }
     }
 
