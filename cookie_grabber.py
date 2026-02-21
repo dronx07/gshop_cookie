@@ -10,7 +10,7 @@ KEYWORD = ["car", "cars", "auto", "vehicle", "bus"]
 TARGET_URL = "https://www.google.com/search?q={}"
 POOL_SIZE = 5
 SLEEP = 3
-MAX_SESSIONS = 100
+MAX_SESSIONS = 500
 
 
 def grab_session(session_id: str, keyword: str):
