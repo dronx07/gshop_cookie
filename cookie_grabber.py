@@ -6,7 +6,7 @@ from pathlib import Path
 from seleniumbase import SB
 
 OUTPUT_FILE = Path("session_pool.json")
-KEYWORD = ["car", "cars", "auto", "vehicle", "bus"]
+KEYWORD = ["iphone", "books", "toys", "pillow", "stationary"]
 TARGET_URL = "https://www.google.com/search?q={}"
 POOL_SIZE = 5
 SLEEP = 3
