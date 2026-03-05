@@ -27,7 +27,6 @@ def grab_session(session_id: str, keyword: str):
             sb.sleep(SLEEP)
 
             cookies = sb.get_cookies()
-            ua = sb.get_user_agent()
 
     except Exception as e:
         raise RuntimeError(
