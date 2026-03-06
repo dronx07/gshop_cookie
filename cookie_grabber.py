@@ -6,11 +6,43 @@ from pathlib import Path
 from seleniumbase import SB
 
 OUTPUT_FILE = Path("session_pool.json")
-KEYWORD = ["iphone", "books", "toys", "pillow", "stationary"]
 TARGET_URL = "https://www.google.com/search?q={}"
-POOL_SIZE = 5
+POOL_SIZE = 10
 SLEEP = 3
-MAX_SESSIONS = 1000
+MAX_SESSIONS = 10000
+
+import random
+
+prefixes = [
+    "how to", "best", "top", "what is", "why does", "where to buy",
+    "cheap", "free", "guide to", "tips for", "examples of",
+    "benefits of", "problems with", "difference between"
+]
+
+topics = [
+    "python programming", "machine learning", "bitcoin", "iphone",
+    "digital marketing", "seo", "youtube growth", "weight loss",
+    "healthy diet", "home workout", "laptop for students",
+    "gaming pc", "electric cars", "tesla stock", "remote jobs",
+    "ai tools", "chatgpt", "data science", "web development",
+    "cybersecurity", "cloud computing", "online business",
+    "dropshipping", "affiliate marketing", "freelancing"
+]
+
+suffixes = [
+    "for beginners", "in 2025", "step by step", "tutorial",
+    "explained", "near me", "with examples", "for students",
+    "for business", "for passive income"
+]
+
+keywords = []
+
+while len(keywords) < 100:
+    keyword = f"{random.choice(prefixes)} {random.choice(topics)} {random.choice(suffixes)}"
+    keywords.append(keyword)
+
+for i, k in enumerate(keywords, 1):
+    print(f"{i}. {k}")
 
 
 def grab_session(session_id: str, keyword: str):
@@ -58,7 +90,7 @@ def main():
         sessions = []
 
     for _ in range(POOL_SIZE):
-        keyword = random.choice(KEYWORD)
+        keyword = random.choice(keywords)
         session_id = f"s{len(sessions) + 1}"
         print(f"[INFO] Generating session {session_id} using keyword {keyword}")
         session = grab_session(session_id, keyword)
