@@ -81,7 +81,6 @@ def grab_session(session_id: str, keyword: str):
             "Sec-Ch-Ua": '"Not:A-Brand";v="99", "Google Chrome";v="142", "Chromium";v="142"',
             "Sec-Ch-Ua-Arch": "x86",
             "Sec-Ch-Ua-Bitness": "64",
-            "Sec-Ch-Ua-Full-Version-List": '"Not:A-Brand";v="99.0.0.0", "Google Chrome";v="145.0.7632.160", "Chromium";v="145.0.7632.160"',
             "Sec-Ch-Ua-Mobile": "?0",
             "Sec-Ch-ua-Model": "",
             "Sec-Ch-ua-Platform": "Windows",
