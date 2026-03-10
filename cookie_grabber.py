@@ -9,6 +9,7 @@ OUTPUT_FILE = Path("session_pool.json")
 TARGET_URL = "https://www.google.com/search?q={}"
 POOL_SIZE = 100
 SLEEP = 3
+MAX_SESSIONS = 10000
 
 import random
 
@@ -114,6 +115,9 @@ def main():
         print(f"[INFO] Generating session {session_id} using keyword {keyword}")
         session = grab_session(session_id, keyword)
         sessions.append(session)
+
+        if len(sessions) > MAX_SESSIONS:
+            sessions = sessions[-MAX_SESSIONS:]
 
     payload = {
         "updated_at": int(time.time()),
